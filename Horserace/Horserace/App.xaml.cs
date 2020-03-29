@@ -31,7 +31,6 @@ namespace Horserace
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            GameController gameController = new GameController();
         }
 
         /// <summary>

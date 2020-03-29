@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.NetworkInformation;
-using Windows.Web.Http;
+using Windows.Networking;
+using Windows.Networking.Sockets;
 
 namespace Horserace.Controllers
 {
@@ -14,17 +10,28 @@ namespace Horserace.Controllers
 
         public GameController()
         {
-
-
-
-            for (var i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
-                pingding2("https://www.realtek.com/en/");
-                pingding2("https://nu.nl");
-                pingding2("https://www.google.nl");
-                pingding2("https://www.lingscars.com");
-
+                Ping("google.com");
+                Ping("www.facebook.com");
+                Ping("www.docs.microsoft.com");
             }
+
+         
+            
+        }
+
+        public async void Ping(string url)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+
+            stopwatch.Start();
+            StreamSocket socket = new StreamSocket();
+            await socket.ConnectAsync(new HostName(url), "80");
+            stopwatch.Stop();
+
+            Debug.WriteLine($"url {url} time: {stopwatch.ElapsedMilliseconds}");
 
         }
 

@@ -10,7 +10,7 @@
 
     <Grid>
         
-        <ListView ItemsSource="{Binding}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+        <ListView ItemsSource="{Binding}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" RequestedTheme="Light">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment"  Value="Stretch"></Setter>
