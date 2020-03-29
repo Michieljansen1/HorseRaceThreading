@@ -6,9 +6,31 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Light" Width="500">
+
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*">
+            </RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
+        <Rectangle Fill="#FFDEDEF9" Grid.ColumnSpan="3" Grid.Column="0" Height="70" VerticalAlignment="Top"></Rectangle>
+        <TextBlock HorizontalAlignment="Center" Grid.ColumnSpan="3" Grid.Column="0" FontSize="30" Margin="0,10,0,50">Horse racing</TextBlock>
+
+        <TextBox Grid.Row="1" Grid.Column="0" PlaceholderText="Naam" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBox>
+        <TextBox Grid.Row="1" Grid.Column="1" PlaceholderText="URL" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBox>
+        <Button Content="Add horse" Grid.Row="1" Grid.Column="3"  Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="5,0,5,0"></Button>
+
+        <local:HorseControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding}"></local:HorseControl>
+        
     </Grid>
 </Page>
