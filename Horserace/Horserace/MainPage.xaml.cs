@@ -25,15 +25,6 @@ namespace Horserace
         public MainPage()
         {
             this.InitializeComponent();
-            DataContext = Enumerable.Range(1, 10)
-                               .Select(x => new Horse() {
-                                   Name = "Horse" + x.ToString()
-                               });
         }
-    }
-
-    public class Horse
-    {
-        public string Name { get; set; }
     }
 }
