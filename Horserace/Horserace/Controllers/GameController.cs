@@ -66,6 +66,16 @@ namespace Horserace.Controllers
             _horses.Clear();
         }
 
+        /// <summary>
+        /// Restarts the game with the current added horses
+        /// </summary>
+        public void Restart()
+        {
+            foreach (var horse in _horses) {
+                horse.Distance = 0;
+            }
+        }
+
         public ObservableCollection<Horse> Horses => _horses;
 
     }

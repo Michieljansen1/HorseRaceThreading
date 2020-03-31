@@ -40,5 +40,9 @@ namespace Horserace
         {
            _gameController.Start();
         }
+
+        private void Btn_restartGame_OnClick_OnClick(object sender, RoutedEventArgs e) {
+            _gameController.Restart();
+        }
     }
 }

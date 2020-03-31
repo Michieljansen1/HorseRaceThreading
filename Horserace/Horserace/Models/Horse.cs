@@ -30,6 +30,7 @@ namespace Horserace.Models
             _url = url;
             _ping = new Ping(url, totalPings);
             _ping._pingReceived += PingReceived;
+            Distance = 0;
         }
 
         private void PingReceived(object sender, HorseProgressReport e)
