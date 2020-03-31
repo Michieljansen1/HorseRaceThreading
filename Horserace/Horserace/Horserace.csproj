@@ -11,7 +11,7 @@
     <AssemblyName>Horserace</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -122,6 +122,7 @@
     <Compile Include="Common\PageLoader.cs" />
     <Compile Include="Common\Ping.cs" />
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Events\HorseChangedEventArgs.cs" />
     <Compile Include="Events\HorseProgressReport.cs" />
     <Compile Include="HorseControl.xaml.cs">
       <DependentUpon>HorseControl.xaml</DependentUpon>

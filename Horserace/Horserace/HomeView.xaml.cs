@@ -38,7 +38,7 @@ namespace Horserace
 
         private void Btn_startRace_OnClick_OnClick(object sender, RoutedEventArgs e)
         {
-           //TODO: start the race
+           _gameController.Start();
         }
     }
 }
