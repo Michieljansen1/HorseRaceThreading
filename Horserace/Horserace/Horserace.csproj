@@ -120,6 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Events\HorseProgressReport.cs" />
     <Compile Include="HorseControl.xaml.cs">
       <DependentUpon>HorseControl.xaml</DependentUpon>
     </Compile>
