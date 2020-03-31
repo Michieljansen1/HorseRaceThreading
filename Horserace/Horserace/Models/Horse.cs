@@ -1,5 +1,7 @@
 ﻿
 
+using Horserace.Events;
+
 namespace Horserace.Models
 {
 
@@ -11,13 +13,23 @@ namespace Horserace.Models
 
         private string _name;
         private string _url;
-        // private  _ping;
         private int _totalPings;
+        private int _distance;
 
-
-        public Horse()
+        public Horse(string name, int totalPings, string url)
         {
-
+            _name = name;
+            _totalPings = totalPings;
+            _url = url;
         }
+
+        public void UpdateProgress(HorseProgressReport progress)
+        {
+            _distance = progress.TotalTime;
+        }
+
+        public string Name => _name;
+
+        public int Distance => _distance;
     }
 }

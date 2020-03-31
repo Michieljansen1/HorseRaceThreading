@@ -12,19 +12,19 @@ namespace Horserace.Common
             
         }
 
-        public async void PingURL(string url)
+        public async void StartPing(string url)
         {
-
+        
             Stopwatch stopwatch = new Stopwatch();
-
-
+        
+        
             stopwatch.Start();
             StreamSocket socket = new StreamSocket();
             await socket.ConnectAsync(new HostName(url), "80");
             stopwatch.Stop();
-
+        
             Debug.WriteLine($"url {url} time: {stopwatch.ElapsedMilliseconds}");
-
+        
         }
     }
 }
