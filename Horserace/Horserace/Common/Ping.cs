@@ -12,7 +12,7 @@ namespace Horserace.Common
             
         }
 
-        public async void Ping(string url)
+        public async void PingURL(string url)
         {
 
             Stopwatch stopwatch = new Stopwatch();
