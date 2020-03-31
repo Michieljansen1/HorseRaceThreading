@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.UI.Xaml;
@@ -45,10 +46,12 @@ namespace Horserace
         {
            _gameController.Start();
 
-
             MediaUtil.PlaySound("gun-shot.mp3");
 
-           
+            Thread.Sleep(400);
+
+            MediaUtil.PlaySound("galop.mp3");
+            MediaUtil.PlaySound("crowd.mp3");
         }
 
         private void Btn_restartGame_OnClick_OnClick(object sender, RoutedEventArgs e) {
