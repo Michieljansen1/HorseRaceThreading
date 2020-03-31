@@ -1,8 +1,13 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using System.Threading;
+using Windows.Media.Core;
+using Windows.Media.Playback;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Horserace.Controllers;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Notifications;
+using Horserace.Utlis;
 
 namespace Horserace
 {
@@ -12,6 +17,7 @@ namespace Horserace
     public sealed partial class HomeView : Page
     {
         private GameController _gameController;
+
         public HomeView()
         {
             this.InitializeComponent();
@@ -36,9 +42,13 @@ namespace Horserace
 
         }
 
-        private void Btn_startRace_OnClick_OnClick(object sender, RoutedEventArgs e)
+        private async void Btn_startRace_OnClick(object sender, RoutedEventArgs e)
         {
            _gameController.Start();
+
+            MediaUtil.PlaySound("gun-shot.mp3");
+            
+            MediaUtil.PlaySound("galopandcrowd.mp3");
         }
 
         private void Btn_restartGame_OnClick_OnClick(object sender, RoutedEventArgs e) {
