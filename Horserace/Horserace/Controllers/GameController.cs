@@ -21,6 +21,7 @@ namespace Horserace.Controllers
         /// </summary>
         public void Start()
         {
+            //TODO: only start game when enough valid horses have been added to the race
             foreach (var horse in _horses)
             {
                 horse.Start();   
@@ -41,7 +42,7 @@ namespace Horserace.Controllers
         /// <summary>
         /// Clears all the horses from the game
         /// </summary>
-        public void reset()
+        public void Reset()
         {
             _horses.Clear();
         }
