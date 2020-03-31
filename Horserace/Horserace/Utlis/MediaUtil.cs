@@ -14,21 +14,24 @@ namespace Horserace.Utlis
         /// <summary>
         /// 
         /// </summary>
-        private static MediaPlayer _player = new MediaPlayer();
+        private static MediaPlayer _player;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
-        public static async void PlaySound(string name)
+        public static async void PlaySound(string name, bool looped = false)
         {
+            _player = new MediaPlayer();
+
             MediaElement gunshot = new MediaElement();
             Windows.Storage.StorageFolder folder = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
             Windows.Storage.StorageFile file = await folder.GetFileAsync(name);
 
             _player.Source = MediaSource.CreateFromStorageFile(file);
+            _player.IsLoopingEnabled = looped;
+
             _player.Play();
         }
-
     }
 }
