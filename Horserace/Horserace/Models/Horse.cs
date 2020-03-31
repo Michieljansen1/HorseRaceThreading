@@ -1,4 +1,8 @@
-﻿using Horserace.Common;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+using Horserace.Common;
 using Horserace.Events;
 
 namespace Horserace.Models
@@ -7,7 +11,7 @@ namespace Horserace.Models
     /**
     *
     */
-    class Horse //: INotifyPropertyChanged
+    class Horse : INotifyPropertyChanged
     {
 
         private string _name;
@@ -27,7 +31,7 @@ namespace Horserace.Models
 
         private void PingReceived(object sender, HorseProgressReport e)
         {
-            _distance = e.TotalTime;
+            Distance = e.TotalTime;
         }
 
         public void Start()
@@ -37,11 +41,23 @@ namespace Horserace.Models
 
         public string Name => _name;
 
-        //public int Distance
-        //{
-        //    //get;
-        //    //set { _distance = value;
-        //    //    NotifyPropertyChanged() }
-        //}
+        public int Distance
+        {
+            get { return _distance; }
+            set { 
+                _distance = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string name = "") {
+            _ = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                CoreDispatcherPriority.High,
+                new DispatchedHandler(() => {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+                }));
+        }
     }
 }

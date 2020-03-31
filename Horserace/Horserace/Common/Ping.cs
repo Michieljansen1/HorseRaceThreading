@@ -15,7 +15,7 @@ namespace Horserace.Common
         int _totalPings;
         private string _url;
         private int _previousPingTime;
-        private int _totalTime;
+        private int _totalTime = 0;
         public event EventHandler<HorseProgressReport> _pingReceived;
 
         public Ping(string url, int totalPings)
@@ -38,8 +38,8 @@ namespace Horserace.Common
                     stopwatch.Start();
                     await socket.ConnectAsync(new HostName(_url), "80");
                     stopwatch.Stop();
-
-                    HorseProgressReport horseProgressReport = new HorseProgressReport((int)stopwatch.ElapsedMilliseconds);
+                    _totalTime += (int)stopwatch.ElapsedMilliseconds;
+                    HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime);
                     OnPingReceived(horseProgressReport);
 
                     Debug.WriteLine($"url {_url} time: {stopwatch.ElapsedMilliseconds} systemTime: {System.DateTime.Now}");
