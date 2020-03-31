@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Horserace.Common;
 using Horserace.Controllers;
-using Horserace.Models;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Windows.UI.Notifications;
 
 namespace Horserace
 {
@@ -11,17 +11,34 @@ namespace Horserace
     /// </summary>
     public sealed partial class HomeView : Page
     {
+        private GameController _gameController;
         public HomeView()
         {
             this.InitializeComponent();
 
-            GameController gameController = new GameController();
-            Ping ping = new Ping("google.com", 10);
-            ping.StartPing();
+            _gameController = new GameController();
+            DataContext = _gameController.Horses;
+        }
+        
+        private void Btn_addHorse_OnClick_OnClick(object sender, RoutedEventArgs e)
+        {
+            //TODO: Input validation
+            _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text);
 
-            DataContext = Enumerable.Range(1, 10)
-                .Select(x => new Horse("Test horse", 13, "google.com"));
-            
+            // Clearing input fields after adding horse
+            txt_horseName.Text = "";
+            txt_horseUrl.Text = "";
+        }
+
+        private void Btn_clearHorses_OnClick_OnClick(object sender, RoutedEventArgs e)
+        {
+            _gameController.Reset();
+
+        }
+
+        private void Btn_startRace_OnClick_OnClick(object sender, RoutedEventArgs e)
+        {
+           //TODO: start the race
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿
-
-using Horserace.Events;
+﻿using Horserace.Events;
 
 namespace Horserace.Models
 {
@@ -26,6 +24,11 @@ namespace Horserace.Models
         public void UpdateProgress(HorseProgressReport progress)
         {
             _distance = progress.TotalTime;
+        }
+
+        public void Start()
+        {
+
         }
 
         public string Name => _name;
