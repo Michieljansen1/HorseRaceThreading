@@ -49,10 +49,13 @@ namespace Horserace
             MediaUtil.PlaySound("gun-shot.mp3");
             
             MediaUtil.PlaySound("galopandcrowd.mp3");
+<<<<<<< HEAD
         }
 
         private void Btn_restartGame_OnClick_OnClick(object sender, RoutedEventArgs e) {
             _gameController.Restart();
+=======
+>>>>>>> develop
         }
     }
 }
