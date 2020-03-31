@@ -20,6 +20,7 @@ namespace Horserace.Models
         private int _totalPings;
         private int _distance;
         private Ping _ping;
+        private int _furthestHorseDistance = 0;
         public event EventHandler<HorseChangedEventArgs> _horseChanged;
 
         public Horse(string name, int totalPings, string url)
@@ -52,6 +53,14 @@ namespace Horserace.Models
             }
         }
 
+        public int FurthestHorseDistance {
+            get => _furthestHorseDistance;
+            set {
+                _furthestHorseDistance = value;
+                OnFurthestHorseChange();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void RaisePropertyChanged([CallerMemberName] string name = "") {
@@ -60,6 +69,14 @@ namespace Horserace.Models
                 new DispatchedHandler(() => {
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
                     OnHorseChanged(new HorseChangedEventArgs(this));
+                }));
+        }
+
+        protected void OnFurthestHorseChange([CallerMemberName] string name = "") {
+            _ = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
+                CoreDispatcherPriority.High,
+                new DispatchedHandler(() => {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
                 }));
         }
 

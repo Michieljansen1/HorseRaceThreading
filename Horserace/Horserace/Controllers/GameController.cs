@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
+﻿using System.Collections.ObjectModel;
 using Horserace.Events;
 using Horserace.Models;
 
 namespace Horserace.Controllers
 {
-    class GameController : INotifyPropertyChanged
+    class GameController
     {
         private ObservableCollection<Horse> _horses;
-        private int _furthestHorseDistance = 0;
 
         /// <summary>
         /// Constructor
@@ -25,10 +18,18 @@ namespace Horserace.Controllers
 
         private void HorseChanged(object sender, HorseChangedEventArgs e)
         {
-            // TODO: BindingExpression path error: 'FurthestHorseDistance' property not found on 'Horserace.Models.Horse'
-            if (_furthestHorseDistance < e.Horse.Distance)
+            int distance = 1;
+            foreach (Horse horse in _horses)
             {
-                FurthestHorseDistance = e.Horse.Distance;
+                if (distance < horse.Distance)
+                {
+                    distance = horse.Distance;
+                }
+            }
+
+            foreach (Horse horse in _horses)
+            {
+                horse.FurthestHorseDistance = distance + (distance / 10);
             }
         }
 
@@ -67,24 +68,5 @@ namespace Horserace.Controllers
 
         public ObservableCollection<Horse> Horses => _horses;
 
-        public int FurthestHorseDistance
-        {
-            get => _furthestHorseDistance;
-            set {
-                _furthestHorseDistance = value;
-                Debug.WriteLine("Max distance = " + value);
-                RaisePropertyChanged();
-            }
-        }
-      
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged([CallerMemberName] string name = "") {
-            _ = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
-                CoreDispatcherPriority.High,
-                new DispatchedHandler(() => {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-                }));
-        }
     }
 }
