@@ -17,14 +17,11 @@ namespace Horserace.Events
 
         // 
         private int _totalTime { get; }
-
+        //Constructor
         public HorseProgressReport(Horse horse, int totalTime)
         {
-
             _horse = horse;
             _totalTime = totalTime;
         }
-
-
     }
 }
