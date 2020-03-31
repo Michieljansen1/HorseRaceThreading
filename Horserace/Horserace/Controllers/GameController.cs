@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Horserace.Events;
 using Horserace.Models;
 
 namespace Horserace.Controllers
@@ -7,13 +8,29 @@ namespace Horserace.Controllers
     {
         private ObservableCollection<Horse> _horses;
 
-
         /// <summary>
         /// Constructor
         /// </summary>
         public GameController()
         {
             _horses = new ObservableCollection<Horse>();
+        }
+
+        private void HorseChanged(object sender, HorseChangedEventArgs e)
+        {
+            int distance = 1;
+            foreach (Horse horse in _horses)
+            {
+                if (distance < horse.Distance)
+                {
+                    distance = horse.Distance;
+                }
+            }
+
+            foreach (Horse horse in _horses)
+            {
+                horse.FurthestHorseDistance = distance + (distance / 10);
+            }
         }
 
         /// <summary>
@@ -36,7 +53,9 @@ namespace Horserace.Controllers
         /// <param name="url">The url that will be pinged</param>
         public void AddHorse(string name, int totalPings, string url)
         {
-            _horses.Add(new Horse(name, totalPings, url));
+            Horse horse = new Horse(name, totalPings, url);
+            horse._horseChanged += HorseChanged;
+            _horses.Add(horse);
         }
 
         /// <summary>
@@ -48,5 +67,6 @@ namespace Horserace.Controllers
         }
 
         public ObservableCollection<Horse> Horses => _horses;
+
     }
 }

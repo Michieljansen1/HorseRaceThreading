@@ -28,7 +28,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}"></TextBlock>
-                        <ProgressBar Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Value="{Binding Distance}"></ProgressBar>
+                        <ProgressBar x:Name="prb_distance" Maximum="{Binding FurthestHorseDistance, Mode=OneWay}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Value="{Binding Distance, Mode=OneWay}"></ProgressBar>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
