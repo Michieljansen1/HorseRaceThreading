@@ -1,12 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using Windows.Networking;
+using Windows.Networking.Sockets;
 
 namespace Horserace.Common
 {
-    class Ping
+    class Ping 
     {
+        public Ping(string url)
+        {
+            
+        }
+
+        public async void Ping(string url)
+        {
+
+            Stopwatch stopwatch = new Stopwatch();
+
+
+            stopwatch.Start();
+            StreamSocket socket = new StreamSocket();
+            await socket.ConnectAsync(new HostName(url), "80");
+            stopwatch.Stop();
+
+            Debug.WriteLine($"url {url} time: {stopwatch.ElapsedMilliseconds}");
+
+        }
     }
 }

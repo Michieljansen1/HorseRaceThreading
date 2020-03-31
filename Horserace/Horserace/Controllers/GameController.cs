@@ -8,22 +8,9 @@ namespace Horserace.Controllers
     class GameController
     {
 
+        // Constructor
         public GameController()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Ping("google.com");
-                Ping("www.facebook.com");
-                Ping("www.docs.microsoft.com");
-            }
-
-         
-            
         }
-
- 
-
-
-
     }
 }
