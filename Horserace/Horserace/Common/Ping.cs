@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Horserace.Events;
+using Horserace.Models;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using Windows.Foundation;
@@ -14,6 +16,7 @@ namespace Horserace.Common
         private string _url;
         private int _previousPingTime;
         private int _totalTime;
+        public event EventHandler<HorseProgressReport> _pingReceived;
 
         public Ping(string url, int totalPings)
         {
@@ -35,11 +38,21 @@ namespace Horserace.Common
                     stopwatch.Start();
                     await socket.ConnectAsync(new HostName(_url), "80");
                     stopwatch.Stop();
+
+                    HorseProgressReport horseProgressReport = new HorseProgressReport((int)stopwatch.ElapsedMilliseconds);
+                    OnPingReceived(horseProgressReport);
+
                     Debug.WriteLine($"url {_url} time: {stopwatch.ElapsedMilliseconds} systemTime: {System.DateTime.Now}");
                     Thread.Sleep(1000);
                     i++;
                 }
             });
+        }
+        protected virtual void OnPingReceived(HorseProgressReport e) {
+            EventHandler<HorseProgressReport> handler = _pingReceived;
+            if (handler != null) {
+                handler(this, e);
+            }
         }
     }
 }

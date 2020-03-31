@@ -36,6 +36,7 @@ namespace Horserace.Controllers
         public void AddHorse(string name, int totalPings, string url)
         {
             _horses.Add(new Horse(name, totalPings, url));
+            Start();
         }
 
         /// <summary>

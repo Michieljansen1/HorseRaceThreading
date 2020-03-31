@@ -1,26 +1,22 @@
 ﻿using Horserace.Models;
+using System;
 
 namespace Horserace.Events
 {
     /**
      *
      */
-    class HorseProgressReport
+    class HorseProgressReport : EventArgs
     {
-        //
-        private Horse _horse { get;}
-
         // 
         private int _totalTime;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="horse"></param>
         /// <param name="totalTime"></param>
-        public HorseProgressReport(Horse horse, int totalTime)
+        public HorseProgressReport(int totalTime)
         {
-            _horse = horse;
             _totalTime = totalTime;
         }
 
