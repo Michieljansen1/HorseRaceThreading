@@ -119,6 +119,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\PageLoader.cs" />
+    <Compile Include="Common\Ping.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Events\HorseProgressReport.cs" />
     <Compile Include="HorseControl.xaml.cs">
