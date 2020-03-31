@@ -42,16 +42,13 @@ namespace Horserace
 
         }
 
-        private async void Btn_startRace_OnClick_OnClick(object sender, RoutedEventArgs e)
+        private async void Btn_startRace_OnClick(object sender, RoutedEventArgs e)
         {
            _gameController.Start();
 
             MediaUtil.PlaySound("gun-shot.mp3");
-
-            Thread.Sleep(400);
-
-            MediaUtil.PlaySound("galop.mp3");
-            MediaUtil.PlaySound("crowd.mp3");
+            
+            MediaUtil.PlaySound("galopandcrowd.mp3");
         }
     }
 }
