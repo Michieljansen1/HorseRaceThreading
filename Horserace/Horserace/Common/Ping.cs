@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using Windows.AI.MachineLearning;
 using Windows.Foundation;
 using Windows.Networking;
 using Windows.Networking.Sockets;
-using Windows.UI.Xaml;
 
 namespace Horserace.Common
 {

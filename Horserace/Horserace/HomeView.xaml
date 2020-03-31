@@ -26,9 +26,9 @@
         <Rectangle Fill="#FFDEDEF9" Grid.ColumnSpan="3" Grid.Column="0" Height="70" VerticalAlignment="Top"></Rectangle>
         <TextBlock HorizontalAlignment="Center" Grid.ColumnSpan="3" Grid.Column="0" FontSize="30" Margin="0,10,0,50">Horse racing</TextBlock>
 
-        <TextBox Grid.Row="1" Grid.Column="0" PlaceholderText="Naam" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBox>
-        <TextBox Grid.Row="1" Grid.Column="1" PlaceholderText="URL" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBox>
-        <Button Content="Add horse" Grid.Row="1" Grid.Column="3"  Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="5,0,5,0"></Button>
+        <TextBox x:Name="txt_horseName" Grid.Row="1" Grid.Column="0" PlaceholderText="Naam" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBox>
+        <TextBox x:Name="txt_horseUrl" Grid.Row="1" Grid.Column="1" PlaceholderText="URL" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBox>
+        <Button x:Name="btn_addHorse" Content="Add horse" Grid.Row="1" Grid.Column="3"  Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="5,0,5,0" Click="Btn_addHorse_OnClick_OnClick"></Button>
 
         <local:HorseControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding}"></local:HorseControl>
         
