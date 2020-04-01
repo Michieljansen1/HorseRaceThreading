@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using Windows.Media.Core;
 using Windows.Media.Playback;
@@ -26,11 +27,12 @@ namespace Horserace
             DataContext = _gameController.Horses;
         }
         
-        private void Btn_addHorse_OnClick_OnClick(object sender, RoutedEventArgs e)
+        private void Btn_addHorse_OnClick(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txt_horseName.Text))
             {
                 //TODO throw toast
+                Debug.WriteLine($"Empty text");
             }
 
             if (string.IsNullOrEmpty(txt_horseUrl.Text))
@@ -45,7 +47,7 @@ namespace Horserace
             txt_horseUrl.Text = "";
         }
 
-        private void Btn_clearHorses_OnClick_OnClick(object sender, RoutedEventArgs e)
+        private void Btn_clearHorses_OnClick(object sender, RoutedEventArgs e)
         {
             _gameController.Reset();
 
