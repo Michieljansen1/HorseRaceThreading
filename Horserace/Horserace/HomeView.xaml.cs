@@ -69,7 +69,7 @@ namespace Horserace
         /// <param name="e"></param>
         private async void Btn_startRace_OnClick(object sender, RoutedEventArgs e)
         {
-           _gameController.Start();
+           _gameController.Start((int)sld_numberOfPings.Value);
 
             MediaUtil.PlaySound("gun-shot.mp3");
             

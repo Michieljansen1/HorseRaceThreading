@@ -10,8 +10,6 @@ namespace Horserace.Common
 {
     class Ping
     {
-
-        int _totalPings;
         private string _url;
         private int _previousPingTime;
         private int _totalTime = 0; // The time for each ping with the delta from each ping in ms
@@ -25,18 +23,16 @@ namespace Horserace.Common
         /// Constructor
         /// </summary>
         /// <param name="url">URL to ping</param>
-        /// <param name="totalPings">Total amount of pings to be done</param>
-        public Ping(string url, int totalPings)
+        public Ping(string url)
         {
             _url = url;
-            _totalPings = totalPings;
         }
 
         /// <summary>
         /// Initializes a thread and starts pinging the specified server
         /// Calculates the ping and delta of each ping in ms
         /// </summary>
-        public void StartPing()
+        public void StartPing(int numberOfPings)
         {
             _isRunning = true;
 
@@ -45,7 +41,7 @@ namespace Horserace.Common
                 int previousPingTime = 0;
                 int delta = 0;
                 int i = 0;
-                while (i < _totalPings && _isRunning)
+                while (i < numberOfPings && _isRunning)
                 {
                     Stopwatch stopwatch = new Stopwatch();
                     StreamSocket socket = new StreamSocket();

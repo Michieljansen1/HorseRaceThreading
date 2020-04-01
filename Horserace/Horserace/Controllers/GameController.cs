@@ -63,12 +63,12 @@ namespace Horserace.Controllers
         /// <summary>
         /// Starts the horse racing game
         /// </summary>
-        public void Start()
+        public void Start(int numberOfPings)
         {
             //TODO: only start game when enough valid horses have been added to the race
             foreach (var horse in _horses)
             {
-                horse.Start();   
+                horse.Start(numberOfPings);   
             }
         }
 
@@ -76,11 +76,10 @@ namespace Horserace.Controllers
         /// Creates a new horse and adds it to the horse list
         /// </summary>
         /// <param name="name">Name of the horse</param>
-        /// <param name="totalPings">Total amount of pings that will be executed</param>
         /// <param name="url">The url that will be pinged</param>
         public void AddHorse(string name, int totalPings, string url)
         {
-            Horse horse = new Horse(name, totalPings, url);
+            Horse horse = new Horse(name, url);
             horse._horseChanged += HorseChanged;
             horse.HorseFinishedEvent += HorseFinished;
             _horses.Add(horse);

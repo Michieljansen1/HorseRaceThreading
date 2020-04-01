@@ -31,12 +31,11 @@ namespace Horserace.Models
         public event EventHandler<HorseChangedEventArgs> _horseChanged;
         public event EventHandler _horseFinished;
 
-        public Horse(string name, int totalPings, string url)
+        public Horse(string name, string url)
         {
             _name = name;
-            _totalPings = totalPings;
             _url = url;
-            _ping = new Ping(url, totalPings);
+            _ping = new Ping(url);
             _ping._pingReceived += PingReceived;
             _ping._threadFinished += PingFinished;
             Distance = 0;
@@ -57,10 +56,10 @@ namespace Horserace.Models
             OnHorseFinished();
         }
 
-        public void Start()
+        public void Start(int numberOfPings)
         {
             _horseStatus = HorseStatus.RUNNING;
-            _ping.StartPing();
+            _ping.StartPing(numberOfPings);
         }
 
         public void Stop()
