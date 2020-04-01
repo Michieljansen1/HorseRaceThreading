@@ -33,6 +33,7 @@ namespace Horserace
             if (string.IsNullOrEmpty(txt_horseName.Text))
             {
                 //TODO throw toast
+                ToastUtil.Notify("Error", "Invoerveld van naam is leeg");
                 Debug.WriteLine($"Empty text");
                 canBeSubmitted = false;
             }
@@ -40,6 +41,8 @@ namespace Horserace
             if (string.IsNullOrEmpty(txt_horseUrl.Text))
             {
                 //TODO throw toast
+                ToastUtil.Notify("Error", "Invoerveld van de url is leeg");
+
                 canBeSubmitted = false;
             }
 
