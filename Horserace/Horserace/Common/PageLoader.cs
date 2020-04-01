@@ -69,7 +69,6 @@ namespace Horserace.Common
         }
 
 
-
         /**************************************************************************
             * Public methods 
         **************************************************************************/
@@ -82,7 +81,7 @@ namespace Horserace.Common
         {
             foreach (var page in pages)
             {
-                _totalSize += await GetDomSize(url+page);
+                _totalSize += await GetDomSize("https://"+url+page);
             }
 
             return _totalSize;
