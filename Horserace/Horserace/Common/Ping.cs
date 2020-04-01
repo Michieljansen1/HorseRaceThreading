@@ -46,7 +46,17 @@ namespace Horserace.Common
                     Stopwatch stopwatch = new Stopwatch();
                     StreamSocket socket = new StreamSocket();
                     stopwatch.Start();
-                    await socket.ConnectAsync(new HostName(_url), "80");
+                    try
+                    {
+                        await socket.ConnectAsync(new HostName(_url), "80");
+                    }
+                    catch (Exception e)
+                    {
+                        onThreadFinished(FinishedEventArgs.FinishType.ERROR);
+                        onThreadFinished(FinishedEventArgs.FinishType.FINISHED);
+                        return;
+                    }
+                    
                     stopwatch.Stop();
 
                     int ms = (int)stopwatch.ElapsedMilliseconds;

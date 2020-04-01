@@ -8,7 +8,8 @@
         public enum FinishType
         {
             FINISHED,
-            CANCELED
+            CANCELED,
+            ERROR
         }
         private FinishType _finishType;
 

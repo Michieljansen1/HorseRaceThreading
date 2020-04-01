@@ -6,6 +6,7 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Horserace.Common;
 using Horserace.Events;
+using Horserace.Utlis;
 
 namespace Horserace.Models
 {
@@ -51,13 +52,19 @@ namespace Horserace.Models
         }
 
         private async void PingFinished(object sender, FinishedEventArgs e) {
-            if (e.Type == FinishedEventArgs.FinishType.CANCELED)
-            {
-                Distance = 0;
+           switch (e.Type) {
+                case FinishedEventArgs.FinishType.CANCELED:
+                    Distance = 0;
+                    break;
+                case FinishedEventArgs.FinishType.ERROR:
+                    ToastUtil.Notify("Disqualified", $"Horse {_name} has been disqualified");
+                    Debug.WriteLine($"Horse {_name} has been disqualified");
+                    break;
+                case FinishedEventArgs.FinishType.FINISHED:
+                    _horseStatus = HorseStatus.FINISHED;
+                    OnHorseFinished();
+                    break;
             }
-
-            _horseStatus = HorseStatus.FINISHED;
-            OnHorseFinished();
         }
 
         public async void Start(int numberOfPings)
