@@ -29,16 +29,21 @@ namespace Horserace
         
         private void Btn_addHorse_OnClick(object sender, RoutedEventArgs e)
         {
+            bool canBeSubmitted = true;
             if (string.IsNullOrEmpty(txt_horseName.Text))
             {
                 //TODO throw toast
                 Debug.WriteLine($"Empty text");
+                canBeSubmitted = false;
             }
 
             if (string.IsNullOrEmpty(txt_horseUrl.Text))
             {
                 //TODO throw toast
+                canBeSubmitted = false;
             }
+
+            if (!canBeSubmitted) return;
 
             _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text);
 
