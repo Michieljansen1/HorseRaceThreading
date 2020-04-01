@@ -124,6 +124,7 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Events\HorseChangedEventArgs.cs" />
     <Compile Include="Events\HorseProgressReport.cs" />
+    <Compile Include="Events\FinishedEventArgs.cs" />
     <Compile Include="HorseControl.xaml.cs">
       <DependentUpon>HorseControl.xaml</DependentUpon>
     </Compile>

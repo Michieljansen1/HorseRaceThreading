@@ -51,7 +51,7 @@ namespace Horserace
             MediaUtil.PlaySound("galopandcrowd.mp3");
         }
 
-        private void Btn_restartGame_OnClick_OnClick(object sender, RoutedEventArgs e) {
+        private void Btn_resetGame_OnClick(object sender, RoutedEventArgs e) {
             _gameController.Restart();
         }
     }
