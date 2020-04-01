@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Horserace.Common;
@@ -65,13 +64,7 @@ namespace Horserace.Models
         {
             _horseStatus = HorseStatus.RUNNING;
             _ping.StartPing(numberOfPings);
-
-            var size = await _pageLoader.Run(_url);
-
-            Debug.WriteLine(size);
-            Interlocked.Add(ref _distance, int.Parse(size.ToString()));
-
-            // Distance += await _pageLoader.Run(_url);
+            _ping.AddTime(await _pageLoader.Run(_url));
         }
 
         public void Stop()
@@ -102,7 +95,6 @@ namespace Horserace.Models
             get => _currentRound;
             set {
                 _currentRound = value;
-                Debug.WriteLine(_currentRound);
                 OnFurthestHorseChange();
             }
         }

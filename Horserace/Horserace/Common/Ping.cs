@@ -10,7 +10,7 @@ namespace Horserace.Common
 {
     class Ping
     {
-        private string _url;
+        private readonly string _url;
         private int _previousPingTime;
         private int _totalTime = 0; // The time for each ping with the delta from each ping in ms
         private bool _isRunning;
@@ -40,8 +40,8 @@ namespace Horserace.Common
             {
                 int previousPingTime = 0;
                 int delta = 0;
-                int i = 1;
-                while (i <= numberOfPings && _isRunning)
+                int pingIteration = 1;
+                while (pingIteration <= numberOfPings && _isRunning)
                 {
                     Stopwatch stopwatch = new Stopwatch();
                     StreamSocket socket = new StreamSocket();
@@ -52,20 +52,21 @@ namespace Horserace.Common
                     int ms = (int)stopwatch.ElapsedMilliseconds;
 
                     // First time there is no delta
-                    if (i > 0)
+                    if (pingIteration > 0)
                     {
                         delta = Math.Abs(ms - previousPingTime);
                         previousPingTime = ms;
                     }
-                    _totalTime += ms + delta;
 
-                    HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime, i);
+                    Interlocked.Add(ref _totalTime, ms + delta);
+
+                    HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime, pingIteration);
                     OnPingReceived(horseProgressReport);
 
                     // TODO: remove debug
                     Debug.WriteLine($"url {_url} time: {ms} systemTime: {System.DateTime.Now} delta: {delta} total time: {_totalTime}");
                     Thread.Sleep(1000);
-                    i++;
+                    pingIteration++;
                 }
 
                 if (!_isRunning)
@@ -84,6 +85,11 @@ namespace Horserace.Common
         public void StopPing()
         {
             _isRunning = false;
+        }
+
+        public void AddTime(int time)
+        {
+            Interlocked.Add(ref _totalTime, time);
         }
 
         /// <summary>
