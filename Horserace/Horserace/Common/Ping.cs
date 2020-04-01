@@ -14,7 +14,7 @@ namespace Horserace.Common
         int _totalPings;
         private string _url;
         private int _previousPingTime;
-        private int _totalTime = 0;
+        private int _totalTime = 0; // The time for each ping with the delta from each ping in ms
         private bool _isRunning;
         private IAsyncAction _pingAction;
 
@@ -55,6 +55,7 @@ namespace Horserace.Common
 
                     int ms = (int)stopwatch.ElapsedMilliseconds;
 
+                    // First time there is no delta
                     if (i > 0)
                     {
                         delta = Math.Abs(ms - previousPingTime);
@@ -65,6 +66,7 @@ namespace Horserace.Common
                     HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime);
                     OnPingReceived(horseProgressReport);
 
+                    // TODO: remove debug
                     Debug.WriteLine($"url {_url} time: {ms} systemTime: {System.DateTime.Now} delta: {delta} total time: {_totalTime}");
                     Thread.Sleep(1000);
                     i++;
