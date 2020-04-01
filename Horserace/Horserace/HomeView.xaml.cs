@@ -38,7 +38,7 @@ namespace Horserace
             var canBeSubmitted = true;
             // valid url is: example.com // checks for https
             Regex rx = new Regex("^[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$"); 
-            MatchCollection matches = rx.Matches(txt_horseUrl.Text);
+            MatchCollection matches = rx.Matches(txt_horseUrl.Text.ToLower());
 
             if (string.IsNullOrEmpty(txt_horseName.Text))
             {
@@ -61,7 +61,7 @@ namespace Horserace
 
             if (!canBeSubmitted) return;
 
-            _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text);
+            _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text.ToLower());
 
             // Clearing input fields after adding horse
             txt_horseName.Text = "";
