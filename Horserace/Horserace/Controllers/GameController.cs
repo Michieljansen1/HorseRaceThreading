@@ -58,8 +58,12 @@ namespace Horserace.Controllers
                 }
             }
 
-            // Debug.WriteLine($"Horse {bestHorse.Name} won!");
             ToastUtil.Notify($"{bestHorse.Name} is the winner!",$"With a total distance of: {bestHorse.Distance}");
+
+            MediaUtil.Mute();
+            Debug.WriteLine("Muted");
+            MediaUtil.PlaySound("gun-shot.mp3");
+
         }
 
         /// <summary>

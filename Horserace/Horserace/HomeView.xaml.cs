@@ -85,12 +85,22 @@ namespace Horserace
         /// <param name="e"></param>
         private async void Btn_startRace_OnClick(object sender, RoutedEventArgs e)
         {
-           _gameController.Start();
+            _gameController.Start();
+
+
+            MediaUtil.PlayerFinished += MediaUtilOnPlayerFinished;
 
             MediaUtil.PlaySound("gun-shot.mp3");
-            
-            MediaUtil.PlaySound("galopandcrowd.mp3");
+
+
+
         }
+
+        private void MediaUtilOnPlayerFinished(object sender, EventArgs e)
+        {
+            MediaUtil.PlaySound("galopandcrowd.mp3", true);
+        }
+
         /// <summary>
         /// 
         /// </summary>
