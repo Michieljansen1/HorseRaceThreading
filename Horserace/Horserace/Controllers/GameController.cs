@@ -59,9 +59,6 @@ namespace Horserace.Controllers
             }
 
             ToastUtil.Notify($"{bestHorse.Name} is the winner!",$"With a total distance of: {bestHorse.Distance}");
-
-            MediaUtil.Mute();
-            Debug.WriteLine("Muted");
             MediaUtil.PlaySound("trumpet1.mp3");
 
         }

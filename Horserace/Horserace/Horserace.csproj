@@ -133,8 +133,8 @@
     </Compile>
     <Compile Include="Models\Horse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utlis\MediaUtil.cs" />
-    <Compile Include="Utlis\ToastUtil.cs" />
+    <Compile Include="Utils\MediaUtil.cs" />
+    <Compile Include="Utils\ToastUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

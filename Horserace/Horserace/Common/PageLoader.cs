@@ -86,7 +86,7 @@ namespace Horserace.Common
                 _totalSize += await GetDomSize("https://"+url+page);
             }
 
-            return _totalSize / 100;
+            return _totalSize / 10;
         }
     }
 }

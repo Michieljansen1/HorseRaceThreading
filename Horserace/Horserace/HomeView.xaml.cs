@@ -38,12 +38,11 @@ namespace Horserace
             var canBeSubmitted = true;
             // valid url is: example.com // checks for https
             Regex rx = new Regex("^[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$"); 
-            MatchCollection matches = rx.Matches(txt_horseUrl.Text);
+            MatchCollection matches = rx.Matches(txt_horseUrl.Text.ToLower());
 
             if (string.IsNullOrEmpty(txt_horseName.Text))
             {
                 ToastUtil.Notify("No name", "Name cannot be empty");
-                Debug.WriteLine($"Empty text");
                 canBeSubmitted = false;
             }
 
@@ -62,7 +61,7 @@ namespace Horserace
 
             if (!canBeSubmitted) return;
 
-            _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text);
+            _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text.ToLower());
 
             // Clearing input fields after adding horse
             txt_horseName.Text = "";
@@ -86,19 +85,7 @@ namespace Horserace
         private async void Btn_startRace_OnClick(object sender, RoutedEventArgs e)
         {
            _gameController.Start((int)sld_numberOfPings.Value);
-
-
-            MediaUtil.PlayerFinished += MediaUtilOnPlayerFinished;
-
-            MediaUtil.PlaySound("gun-shot.mp3");
-
-
-
-        }
-
-        private void MediaUtilOnPlayerFinished(object sender, EventArgs e)
-        {
-            MediaUtil.PlaySound("galopandcrowd.mp3", true);
+           MediaUtil.PlaySound("gun-shot.mp3");
         }
 
         /// <summary>

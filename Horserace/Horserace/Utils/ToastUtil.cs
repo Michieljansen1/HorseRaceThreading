@@ -20,17 +20,17 @@ namespace Horserace.Utlis
                 BindingGeneric = new ToastBindingGeneric()
                 {
                     Children =
-        {
-            new AdaptiveText()
-            {
-                Text = title
-            },
+                {
+                    new AdaptiveText()
+                    {
+                        Text = title
+                    },
 
-            new AdaptiveText()
-            {
-                Text = content
-            }
-        },
+                    new AdaptiveText()
+                    {
+                        Text = content
+                    }
+                },
                     AppLogoOverride = new ToastGenericAppLogo()
                     {
                         Source = "Assets/Square44x44Logo.scale-400.png",
@@ -47,10 +47,8 @@ namespace Horserace.Utlis
 
             // Sending and displaying the notification
             var toast = new ToastNotification(toastContent.GetXml());
+            toast.Priority = ToastNotificationPriority.High;
             ToastNotificationManager.CreateToastNotifier().Show(toast);
-
         }
-
-
     }
 }
