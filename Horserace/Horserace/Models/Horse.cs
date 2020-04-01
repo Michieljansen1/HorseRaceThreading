@@ -14,14 +14,22 @@ namespace Horserace.Models
     */
     class Horse : INotifyPropertyChanged
     {
-
+        public enum HorseStatus
+        {
+            IDLE,
+            RUNNING,
+            FINISHED
+        }
         private string _name;
         private string _url;
         private int _totalPings;
         private int _distance;
         private Ping _ping;
         private int _furthestHorseDistance = 0;
+        private HorseStatus _horseStatus;
+
         public event EventHandler<HorseChangedEventArgs> _horseChanged;
+        public event EventHandler _horseFinished;
 
         public Horse(string name, int totalPings, string url)
         {
@@ -44,15 +52,20 @@ namespace Horserace.Models
             {
                 Distance = 0;
             }
+
+            _horseStatus = HorseStatus.FINISHED;
+            OnHorseFinished();
         }
 
         public void Start()
         {
+            _horseStatus = HorseStatus.RUNNING;
             _ping.StartPing();
         }
 
         public void Stop()
         {
+            _horseStatus = HorseStatus.IDLE;
             _ping.StopPing();
         }
         public string Name => _name;
@@ -72,6 +85,17 @@ namespace Horserace.Models
                 _furthestHorseDistance = value;
                 OnFurthestHorseChange();
             }
+        }
+
+        public EventHandler HorseFinishedEvent
+        {
+            get { return _horseFinished; }
+            set { _horseFinished = value; }
+        }
+
+        public HorseStatus Status
+        {
+            get { return _horseStatus; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -97,6 +121,13 @@ namespace Horserace.Models
             EventHandler<HorseChangedEventArgs> handler = _horseChanged;
             if (handler != null) {
                 handler(this, e);
+            }
+        }
+
+        protected virtual void OnHorseFinished() {
+            EventHandler handler = _horseFinished;
+            if (handler != null) {
+                handler(this, EventArgs.Empty);
             }
         }
     }
