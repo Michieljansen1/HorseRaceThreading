@@ -87,10 +87,20 @@ namespace Horserace
         {
            _gameController.Start((int)sld_numberOfPings.Value);
 
+
+            MediaUtil.PlayerFinished += MediaUtilOnPlayerFinished;
+
             MediaUtil.PlaySound("gun-shot.mp3");
-            
-            MediaUtil.PlaySound("galopandcrowd.mp3");
+
+
+
         }
+
+        private void MediaUtilOnPlayerFinished(object sender, EventArgs e)
+        {
+            MediaUtil.PlaySound("galopandcrowd.mp3", true);
+        }
+
         /// <summary>
         /// 
         /// </summary>

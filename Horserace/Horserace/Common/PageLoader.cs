@@ -22,6 +22,8 @@ namespace Horserace.Common
         {
             "/",
             "/robots.txt",
+            "/contact",
+            "/sitemap.xml",
         };
 
         /**************************************************************************
@@ -84,7 +86,7 @@ namespace Horserace.Common
                 _totalSize += await GetDomSize("https://"+url+page);
             }
 
-            return _totalSize;
+            return _totalSize / 100;
         }
     }
 }
