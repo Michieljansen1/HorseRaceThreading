@@ -1,5 +1,4 @@
-﻿using Horserace.Models;
-using System;
+﻿using System;
 
 namespace Horserace.Events
 {
@@ -9,15 +8,16 @@ namespace Horserace.Events
     class HorseProgressReport : EventArgs
     {
         // 
-        private int _totalTime;
-
+        private readonly int _totalTime;
+        private readonly int _pingIteration;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="totalTime"></param>
-        public HorseProgressReport(int totalTime)
+        public HorseProgressReport(int totalTime, int pingIteration)
         {
             _totalTime = totalTime;
+            _pingIteration = pingIteration;
         }
 
         /// <summary>
@@ -26,6 +26,13 @@ namespace Horserace.Events
         public int TotalTime
         {
             get{ return _totalTime; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int PingIteration {
+            get { return _pingIteration; }
         }
     }
 }

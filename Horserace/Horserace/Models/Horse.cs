@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
@@ -21,24 +22,22 @@ namespace Horserace.Models
             RUNNING,
             FINISHED
         }
-        private string _name;
-        private string _url;
-        private int _totalPings;
+        private readonly string _name;
+        private readonly string _url;
         private int _distance;
-        private Ping _ping;
+        private readonly Ping _ping;
         private PageLoader _pageLoader;
         private int _furthestHorseDistance = 0;
+        private int _currentRound = 1;
         private HorseStatus _horseStatus;
-
         public event EventHandler<HorseChangedEventArgs> _horseChanged;
         public event EventHandler _horseFinished;
 
-        public Horse(string name, int totalPings, string url)
+        public Horse(string name, string url)
         {
             _name = name;
-            _totalPings = totalPings;
             _url = url;
-            _ping = new Ping(url, totalPings);
+            _ping = new Ping(url);
             _ping._pingReceived += PingReceived;
             _ping._threadFinished += PingFinished;
             _pageLoader = new PageLoader();
@@ -48,6 +47,7 @@ namespace Horserace.Models
         private void PingReceived(object sender, HorseProgressReport e)
         {
             Distance = e.TotalTime;
+            CurrentRound = e.PingIteration;
         }
 
         private void PingFinished(object sender, FinishedEventArgs e) {
@@ -60,10 +60,10 @@ namespace Horserace.Models
             OnHorseFinished();
         }
 
-        public async void Start()
+        public async void Start(int numberOfPings)
         {
             _horseStatus = HorseStatus.RUNNING;
-            _ping.StartPing();
+            _ping.StartPing(numberOfPings);
             Distance += await _pageLoader.Run(_url);
         }
 
@@ -87,6 +87,15 @@ namespace Horserace.Models
             get => _furthestHorseDistance;
             set {
                 _furthestHorseDistance = value;
+                OnFurthestHorseChange();
+            }
+        }
+
+        public int CurrentRound {
+            get => _currentRound;
+            set {
+                _currentRound = value;
+                Debug.WriteLine(_currentRound);
                 OnFurthestHorseChange();
             }
         }
