@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Horserace.Common;
 using Horserace.Controllers;
 using Horserace.Utlis;
 
@@ -22,6 +23,9 @@ namespace Horserace
 
             _gameController = new GameController();
             DataContext = _gameController.Horses;
+
+
+            PageLoader pageLoader = new PageLoader();
         }
         /// <summary>
         /// 

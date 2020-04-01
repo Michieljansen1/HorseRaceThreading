@@ -1,36 +1,44 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
+using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.Networking.Sockets;
 
 namespace Horserace.Common
 {
+    /// <summary>
+    /// Deterimen the size of a webpage class
+    /// </summary>
     class PageLoader
     {
-        //Constructor
-        public PageLoader()
+
+        private int _totalSize;
+
+        /// <summary>
+        /// list of pages
+        /// </summary>
+        readonly string[] pages = new string[]
         {
-
-        }
-
+            "/",
+            "/robots.txt",
+        };
 
         /**************************************************************************
-            * Public methods 
+            * Private methods 
         **************************************************************************/
 
-        public async void GetDom(string url)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        private async Task<int> GetDomSize(string url)
         {
-
-            Stopwatch stopwatch = new Stopwatch();
-            //Create an HTTP client object
             Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
 
-            //Add a user-agent header to the GET request. 
             var headers = httpClient.DefaultRequestHeaders;
 
-            //The safe way to add a header value is to use the TryParseAdd method and verify the return value is true,
-            //especially if the header value is coming from user input.
-            string header = "ie";
+            var header = "ie";
             if (!headers.UserAgent.TryParseAdd(header))
             {
                 throw new Exception("Invalid header value: " + header);
@@ -41,29 +49,43 @@ namespace Horserace.Common
             {
                 throw new Exception("Invalid header value: " + header);
             }
-
-            Uri requestUri = new Uri(url);
+            
+            var requestUri = new Uri(url);
 
             //Send the GET request asynchronously and retrieve the response as a string.
             Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
-            string httpResponseBody = "";
 
             try
             {
-                stopwatch.Start();
-                //Send the GET request
-                // httpResponse = await httpClient.GetAsync(requestUri);
-                // httpResponse.EnsureSuccessStatusCode();
-                // httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                httpResponse = await httpClient.GetAsync(requestUri);
+                return httpResponse.Content.ToString().Length;
+
+
             }
             catch (Exception ex)
             {
-                httpResponseBody = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+                return 0;
+            }
+        }
+
+
+
+        /**************************************************************************
+            * Public methods 
+        **************************************************************************/
+
+        /// <summary>
+        ///  the size of the total site
+        /// </summary>
+        /// <param name="size"></param>
+        public async Task<int> Run(string url)
+        {
+            foreach (var page in pages)
+            {
+                _totalSize += await GetDomSize(url+page);
             }
 
-            stopwatch.Stop();
-
-            Debug.WriteLine("TIME = " + stopwatch.ElapsedMilliseconds + " URL " + url);
+            return _totalSize;
         }
     }
 }
