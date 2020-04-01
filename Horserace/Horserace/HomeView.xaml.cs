@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Horserace.Common;
 using Horserace.Controllers;
 using Horserace.Utlis;
 
@@ -22,6 +24,9 @@ namespace Horserace
 
             _gameController = new GameController();
             DataContext = _gameController.Horses;
+
+
+            PageLoader pageLoader = new PageLoader();
         }
         /// <summary>
         /// 
@@ -31,10 +36,21 @@ namespace Horserace
         private void Btn_addHorse_OnClick(object sender, RoutedEventArgs e)
         {
             var canBeSubmitted = true;
+            // valid url is: example.com // checks for https
+            Regex rx = new Regex("^[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$"); 
+            MatchCollection matches = rx.Matches(txt_horseUrl.Text);
+
             if (string.IsNullOrEmpty(txt_horseName.Text))
             {
                 ToastUtil.Notify("No name", "Name cannot be empty");
                 Debug.WriteLine($"Empty text");
+                canBeSubmitted = false;
+            }
+
+            //When matches is bigger than zero, the url is not valid
+            if (matches.Count == 0)
+            {
+                ToastUtil.Notify("No valid url", "Url is not valid, needs to look like this: example.com");
                 canBeSubmitted = false;
             }
 
