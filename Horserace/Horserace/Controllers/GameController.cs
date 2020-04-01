@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Horserace.Events;
 using Horserace.Models;
 
@@ -39,6 +41,25 @@ namespace Horserace.Controllers
             }
         }
 
+        private void HorseFinished(object sender, EventArgs e) {
+            bool AllHorsesFinished = true;
+            Horse bestHorse = null;
+
+            foreach (Horse horse in _horses) {
+                if (horse.Status != Horse.HorseStatus.FINISHED)
+                {
+                    return;
+                }
+
+                if (bestHorse == null || bestHorse.Distance < horse.Distance)
+                {
+                    bestHorse = horse;
+                }
+            }
+
+            Debug.WriteLine($"Horse {bestHorse.Name} won!");
+        }
+
         /// <summary>
         /// Starts the horse racing game
         /// </summary>
@@ -61,6 +82,7 @@ namespace Horserace.Controllers
         {
             Horse horse = new Horse(name, totalPings, url);
             horse._horseChanged += HorseChanged;
+            horse.HorseFinishedEvent += HorseFinished;
             _horses.Add(horse);
         }
 
