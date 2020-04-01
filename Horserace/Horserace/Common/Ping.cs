@@ -1,5 +1,4 @@
 ﻿using Horserace.Events;
-using Horserace.Models;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -16,22 +15,34 @@ namespace Horserace.Common
         private string _url;
         private int _previousPingTime;
         private int _totalTime = 0;
-        public event EventHandler<HorseProgressReport> _pingReceived;
+        private bool _isRunning;
+        private IAsyncAction _pingAction;
 
+        public event EventHandler<HorseProgressReport> _pingReceived;
+        public event EventHandler<FinishedEventArgs> _threadFinished;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="url">URL to ping</param>
+        /// <param name="totalPings">Total amount of pings to be done</param>
         public Ping(string url, int totalPings)
         {
             _url = url;
             _totalPings = totalPings;
         }
-        
 
+        /// <summary>
+        /// Initializes a thread and starts pinging the specified server
+        /// </summary>
         public void StartPing()
         {
+            _isRunning = true;
 
-            IAsyncAction pingAction = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
+            _pingAction = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
             {
                 int i = 0;
-                while (i < _totalPings)
+                while (i < _totalPings && _isRunning)
                 {
                     Stopwatch stopwatch = new Stopwatch();
                     StreamSocket socket = new StreamSocket();
@@ -46,12 +57,44 @@ namespace Horserace.Common
                     Thread.Sleep(1000);
                     i++;
                 }
+
+                if (!_isRunning)
+                {
+                    onThreadFinished(FinishedEventArgs.FinishType.CANCELED);
+                    return;
+                }
+
+                onThreadFinished(FinishedEventArgs.FinishType.FINISHED);
             });
         }
+
+        /// <summary>
+        /// Signals the ping thread to stop
+        /// </summary>
+        public void StopPing()
+        {
+            _isRunning = false;
+        }
+
+        /// <summary>
+        /// Event triggers whenever a ping is finished
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnPingReceived(HorseProgressReport e) {
             EventHandler<HorseProgressReport> handler = _pingReceived;
             if (handler != null) {
                 handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Event triggers whenever the thread is finished by itself or canceled by the user
+        /// </summary>
+        /// <param name="finishType"></param>
+        protected virtual void onThreadFinished(FinishedEventArgs.FinishType finishType) {
+            EventHandler<FinishedEventArgs> handler = _threadFinished;
+            if (handler != null) {
+                handler(this, new FinishedEventArgs(finishType));
             }
         }
     }

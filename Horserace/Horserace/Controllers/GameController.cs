@@ -16,6 +16,12 @@ namespace Horserace.Controllers
             _horses = new ObservableCollection<Horse>();
         }
 
+        /// <summary>
+        /// Receives an event whenever the horse distance changes and
+        /// sets the progress bar's maximum based on the horse that has traveled the longest distance
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">EventArgs with the horse that changed</param>
         private void HorseChanged(object sender, HorseChangedEventArgs e)
         {
             int distance = 1;
@@ -63,7 +69,21 @@ namespace Horserace.Controllers
         /// </summary>
         public void Reset()
         {
+            foreach (var horse in _horses)
+            {
+                horse.Stop();
+            }
             _horses.Clear();
+        }
+
+        /// <summary>
+        /// Restarts the game with the current added horses
+        /// </summary>
+        public void Restart()
+        {
+            foreach (var horse in _horses) {
+                horse.Stop();
+            }
         }
 
         public ObservableCollection<Horse> Horses => _horses;

@@ -30,6 +30,8 @@ namespace Horserace.Models
             _url = url;
             _ping = new Ping(url, totalPings);
             _ping._pingReceived += PingReceived;
+            _ping._threadFinished += PingFinished;
+            Distance = 0;
         }
 
         private void PingReceived(object sender, HorseProgressReport e)
@@ -37,11 +39,22 @@ namespace Horserace.Models
             Distance = e.TotalTime;
         }
 
+        private void PingFinished(object sender, FinishedEventArgs e) {
+            if (e.Type == FinishedEventArgs.FinishType.CANCELED)
+            {
+                Distance = 0;
+            }
+        }
+
         public void Start()
         {
             _ping.StartPing();
         }
 
+        public void Stop()
+        {
+            _ping.StopPing();
+        }
         public string Name => _name;
 
         public int Distance
