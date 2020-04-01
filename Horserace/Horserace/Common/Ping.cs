@@ -40,8 +40,8 @@ namespace Horserace.Common
             {
                 int previousPingTime = 0;
                 int delta = 0;
-                int i = 0;
-                while (i < numberOfPings && _isRunning)
+                int i = 1;
+                while (i <= numberOfPings && _isRunning)
                 {
                     Stopwatch stopwatch = new Stopwatch();
                     StreamSocket socket = new StreamSocket();
@@ -59,7 +59,7 @@ namespace Horserace.Common
                     }
                     _totalTime += ms + delta;
 
-                    HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime);
+                    HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime, i);
                     OnPingReceived(horseProgressReport);
 
                     // TODO: remove debug
