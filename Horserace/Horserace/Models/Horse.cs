@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Horserace.Common;
@@ -44,13 +45,13 @@ namespace Horserace.Models
             Distance = 0;
         }
 
-        private void PingReceived(object sender, HorseProgressReport e)
+        private async void PingReceived(object sender, HorseProgressReport e)
         {
             Distance = e.TotalTime;
             CurrentRound = e.PingIteration;
         }
 
-        private void PingFinished(object sender, FinishedEventArgs e) {
+        private async void PingFinished(object sender, FinishedEventArgs e) {
             if (e.Type == FinishedEventArgs.FinishType.CANCELED)
             {
                 Distance = 0;
@@ -64,7 +65,13 @@ namespace Horserace.Models
         {
             _horseStatus = HorseStatus.RUNNING;
             _ping.StartPing(numberOfPings);
-            Distance += await _pageLoader.Run(_url);
+
+            var size = await _pageLoader.Run(_url);
+
+            Debug.WriteLine(size);
+            Interlocked.Add(ref _distance, int.Parse(size.ToString()));
+
+            // Distance += await _pageLoader.Run(_url);
         }
 
         public void Stop()
