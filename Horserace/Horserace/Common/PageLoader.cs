@@ -22,6 +22,8 @@ namespace Horserace.Common
         {
             "/",
             "/robots.txt",
+            "/contact",
+            "/sitemap.xml",
         };
 
         /**************************************************************************
