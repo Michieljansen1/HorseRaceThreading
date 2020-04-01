@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
-using Windows.Media.Core;
-using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Horserace.Controllers;
-using Microsoft.Toolkit.Uwp.Notifications;
-using Windows.UI.Notifications;
 using Horserace.Utlis;
 
 namespace Horserace
@@ -18,7 +13,9 @@ namespace Horserace
     public sealed partial class HomeView : Page
     {
         private GameController _gameController;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public HomeView()
         {
             this.InitializeComponent();
@@ -26,23 +23,24 @@ namespace Horserace
             _gameController = new GameController();
             DataContext = _gameController.Horses;
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_addHorse_OnClick(object sender, RoutedEventArgs e)
         {
-            bool canBeSubmitted = true;
+            var canBeSubmitted = true;
             if (string.IsNullOrEmpty(txt_horseName.Text))
             {
-                //TODO throw toast
-                ToastUtil.Notify("Error", "Invoerveld van naam is leeg");
+                ToastUtil.Notify("No name", "Name cannot be empty");
                 Debug.WriteLine($"Empty text");
                 canBeSubmitted = false;
             }
 
             if (string.IsNullOrEmpty(txt_horseUrl.Text))
             {
-                //TODO throw toast
-                ToastUtil.Notify("Error", "Invoerveld van de url is leeg");
-
+                ToastUtil.Notify("No url", "Url cannot be empty");
                 canBeSubmitted = false;
             }
 
@@ -54,13 +52,21 @@ namespace Horserace
             txt_horseName.Text = "";
             txt_horseUrl.Text = "";
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_clearHorses_OnClick(object sender, RoutedEventArgs e)
         {
             _gameController.Reset();
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void Btn_startRace_OnClick(object sender, RoutedEventArgs e)
         {
            _gameController.Start();
@@ -69,7 +75,11 @@ namespace Horserace
             
             MediaUtil.PlaySound("galopandcrowd.mp3");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_resetGame_OnClick(object sender, RoutedEventArgs e) {
             _gameController.Restart();
         }
