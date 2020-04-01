@@ -43,6 +43,10 @@ namespace Horserace.Models
             _ping.StartPing();
         }
 
+        public void Stop()
+        {
+            _ping.StopPing();
+        }
         public string Name => _name;
 
         public int Distance

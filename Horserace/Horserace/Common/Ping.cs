@@ -16,6 +16,9 @@ namespace Horserace.Common
         private string _url;
         private int _previousPingTime;
         private int _totalTime = 0;
+        private bool _isRunning;
+        private IAsyncAction _pingAction;
+
         public event EventHandler<HorseProgressReport> _pingReceived;
 
         public Ping(string url, int totalPings)
@@ -23,16 +26,24 @@ namespace Horserace.Common
             _url = url;
             _totalPings = totalPings;
         }
-        
 
         public void StartPing()
         {
+            _isRunning = true;
 
-            IAsyncAction pingAction = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
+            _pingAction = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
             {
+
+                Debug.WriteLine($"Is running {_isRunning} ");
+
                 int i = 0;
-                while (i < _totalPings)
+                while (i < _totalPings && _pingAction.Status != AsyncStatus.Canceled) //status is 0
                 {
+                    if (!_isRunning)
+                    {
+                        _pingAction.Cancel();
+                    }
+
                     Stopwatch stopwatch = new Stopwatch();
                     StreamSocket socket = new StreamSocket();
                     stopwatch.Start();
@@ -48,6 +59,13 @@ namespace Horserace.Common
                 }
             });
         }
+
+        public void StopPing()
+        {
+            _pingAction.Cancel();
+            _isRunning = false;
+        }
+
         protected virtual void OnPingReceived(HorseProgressReport e) {
             EventHandler<HorseProgressReport> handler = _pingReceived;
             if (handler != null) {

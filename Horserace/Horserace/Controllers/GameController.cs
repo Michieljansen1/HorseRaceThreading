@@ -63,6 +63,10 @@ namespace Horserace.Controllers
         /// </summary>
         public void Reset()
         {
+            foreach (var horse in _horses)
+            {
+                horse.Stop();
+            }
             _horses.Clear();
         }
 
@@ -72,6 +76,7 @@ namespace Horserace.Controllers
         public void Restart()
         {
             foreach (var horse in _horses) {
+                horse.Stop();
                 horse.Distance = 0;
             }
         }
