@@ -14,7 +14,7 @@ namespace Horserace.Common
         int _totalPings;
         private string _url;
         private int _previousPingTime;
-        private int _totalTime = 0;
+        private int _totalTime = 0; // The time for each ping with the delta from each ping in ms
         private bool _isRunning;
         private IAsyncAction _pingAction;
 
@@ -34,6 +34,7 @@ namespace Horserace.Common
 
         /// <summary>
         /// Initializes a thread and starts pinging the specified server
+        /// Calculates the ping and delta of each ping in ms
         /// </summary>
         public void StartPing()
         {
@@ -41,6 +42,8 @@ namespace Horserace.Common
 
             _pingAction = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
             {
+                int previousPingTime = 0;
+                int delta = 0;
                 int i = 0;
                 while (i < _totalPings && _isRunning)
                 {
@@ -49,11 +52,22 @@ namespace Horserace.Common
                     stopwatch.Start();
                     await socket.ConnectAsync(new HostName(_url), "80");
                     stopwatch.Stop();
-                    _totalTime += (int)stopwatch.ElapsedMilliseconds;
+
+                    int ms = (int)stopwatch.ElapsedMilliseconds;
+
+                    // First time there is no delta
+                    if (i > 0)
+                    {
+                        delta = Math.Abs(ms - previousPingTime);
+                        previousPingTime = ms;
+                    }
+                    _totalTime += ms + delta;
+
                     HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime);
                     OnPingReceived(horseProgressReport);
 
-                    Debug.WriteLine($"url {_url} time: {stopwatch.ElapsedMilliseconds} systemTime: {System.DateTime.Now}");
+                    // TODO: remove debug
+                    Debug.WriteLine($"url {_url} time: {ms} systemTime: {System.DateTime.Now} delta: {delta} total time: {_totalTime}");
                     Thread.Sleep(1000);
                     i++;
                 }

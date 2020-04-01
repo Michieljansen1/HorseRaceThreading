@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using Windows.Media.Core;
 using Windows.Media.Playback;
@@ -26,9 +27,24 @@ namespace Horserace
             DataContext = _gameController.Horses;
         }
         
-        private void Btn_addHorse_OnClick_OnClick(object sender, RoutedEventArgs e)
+        private void Btn_addHorse_OnClick(object sender, RoutedEventArgs e)
         {
-            //TODO: Input validation
+            bool canBeSubmitted = true;
+            if (string.IsNullOrEmpty(txt_horseName.Text))
+            {
+                //TODO throw toast
+                Debug.WriteLine($"Empty text");
+                canBeSubmitted = false;
+            }
+
+            if (string.IsNullOrEmpty(txt_horseUrl.Text))
+            {
+                //TODO throw toast
+                canBeSubmitted = false;
+            }
+
+            if (!canBeSubmitted) return;
+
             _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text);
 
             // Clearing input fields after adding horse
@@ -36,7 +52,7 @@ namespace Horserace
             txt_horseUrl.Text = "";
         }
 
-        private void Btn_clearHorses_OnClick_OnClick(object sender, RoutedEventArgs e)
+        private void Btn_clearHorses_OnClick(object sender, RoutedEventArgs e)
         {
             _gameController.Reset();
 
