@@ -26,7 +26,6 @@ namespace Horserace.Models
         private readonly string _url;
         private int _distance;
         private readonly Ping _ping;
-        private Ping _ping;
         private PageLoader _pageLoader;
         private int _furthestHorseDistance = 0;
         private int _currentRound = 1;
@@ -61,7 +60,7 @@ namespace Horserace.Models
             OnHorseFinished();
         }
 
-        public void Start(int numberOfPings)
+        public async void Start(int numberOfPings)
         {
             _horseStatus = HorseStatus.RUNNING;
             _ping.StartPing(numberOfPings);
