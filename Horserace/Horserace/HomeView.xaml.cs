@@ -28,7 +28,16 @@ namespace Horserace
         
         private void Btn_addHorse_OnClick_OnClick(object sender, RoutedEventArgs e)
         {
-            //TODO: Input validation
+            if (string.IsNullOrEmpty(txt_horseName.Text))
+            {
+                //TODO throw toast
+            }
+
+            if (string.IsNullOrEmpty(txt_horseUrl.Text))
+            {
+                //TODO throw toast
+            }
+
             _gameController.AddHorse(txt_horseName.Text, 10, txt_horseUrl.Text);
 
             // Clearing input fields after adding horse
