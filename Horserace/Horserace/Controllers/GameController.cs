@@ -62,7 +62,7 @@ namespace Horserace.Controllers
 
             MediaUtil.Mute();
             Debug.WriteLine("Muted");
-            MediaUtil.PlaySound("gun-shot.mp3");
+            MediaUtil.PlaySound("trumpet1.mp3");
 
         }
 
