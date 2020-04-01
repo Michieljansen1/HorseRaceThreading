@@ -14,6 +14,7 @@ namespace Horserace.Models
     */
     class Horse : INotifyPropertyChanged
     {
+        //TODO refactor to enum dir
         public enum HorseStatus
         {
             IDLE,
@@ -25,6 +26,7 @@ namespace Horserace.Models
         private int _totalPings;
         private int _distance;
         private Ping _ping;
+        private PageLoader _pageLoader;
         private int _furthestHorseDistance = 0;
         private HorseStatus _horseStatus;
 
@@ -39,6 +41,7 @@ namespace Horserace.Models
             _ping = new Ping(url, totalPings);
             _ping._pingReceived += PingReceived;
             _ping._threadFinished += PingFinished;
+            _pageLoader = new PageLoader();
             Distance = 0;
         }
 
@@ -57,10 +60,11 @@ namespace Horserace.Models
             OnHorseFinished();
         }
 
-        public void Start()
+        public async void Start()
         {
             _horseStatus = HorseStatus.RUNNING;
             _ping.StartPing();
+            Distance += await _pageLoader.Run(_url);
         }
 
         public void Stop()
