@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Horserace.Events;
 using Horserace.Models;
+using Horserace.Utlis;
 
 namespace Horserace.Controllers
 {
@@ -57,7 +58,8 @@ namespace Horserace.Controllers
                 }
             }
 
-            Debug.WriteLine($"Horse {bestHorse.Name} won!");
+            // Debug.WriteLine($"Horse {bestHorse.Name} won!");
+            ToastUtil.Notify($"{bestHorse.Name} is the winner!",$"With a total distance of: {bestHorse.Distance}");
         }
 
         /// <summary>
