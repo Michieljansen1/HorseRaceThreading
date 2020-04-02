@@ -119,8 +119,11 @@ namespace Horserace.Controllers
                 }
             }
 
-            ToastUtil.Notify($"{bestHorse.Name} is the winner!", $"With a total distance of: {bestHorse.Distance}");
-            MediaUtil.PlaySound("trumpet1.mp3");
+            if (bestHorse != null)
+            {
+                ToastUtil.Notify($"{bestHorse.Name} is the winner!", $"With a total distance of: {bestHorse.Distance}");
+                MediaUtil.PlaySound("trumpet1.mp3");
+            }
         }
     }
 }

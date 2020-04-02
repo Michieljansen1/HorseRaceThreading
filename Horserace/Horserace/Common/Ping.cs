@@ -28,7 +28,7 @@ namespace Horserace.Common
             _url = url;
         }
 
-        public event EventHandler<HorseProgressReport> PingReceived;
+        public event EventHandler<HorseProgressEventArgs> PingReceived;
         public event EventHandler<FinishedEventArgs> ThreadFinished;
 
         /// <summary>
@@ -72,8 +72,8 @@ namespace Horserace.Common
 
                     Interlocked.Add(ref _totalTime, ms + delta);
 
-                    HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime, pingIteration);
-                    OnPingReceived(horseProgressReport);
+                    HorseProgressEventArgs horseProgressEventArgs = new HorseProgressEventArgs(_totalTime, pingIteration);
+                    OnPingReceived(horseProgressEventArgs);
 
                     Thread.Sleep(1000);
                     pingIteration++;
@@ -94,9 +94,9 @@ namespace Horserace.Common
         ///     Event triggers whenever a ping is finished
         /// </summary>
         /// <param name="e"></param>
-        protected virtual void OnPingReceived(HorseProgressReport e)
+        protected virtual void OnPingReceived(HorseProgressEventArgs e)
         {
-            EventHandler<HorseProgressReport> handler = PingReceived;
+            EventHandler<HorseProgressEventArgs> handler = PingReceived;
             handler?.Invoke(this, e);
         }
 
