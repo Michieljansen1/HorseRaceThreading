@@ -12,16 +12,16 @@ using Horserace.Utlis;
 namespace Horserace.Models
 {
     /// <summary>
-    /// 
+    ///     Main logic for the horse
     /// </summary>
     class Horse : INotifyPropertyChanged
     {
-        private readonly Ping _ping;
-        private readonly string _url;
+        private readonly PageLoader _pageLoader; // Used to get the DOM size
+        private readonly Ping _ping; // Used to ping the server
+        private readonly string _url; // Holds the URL of the website to ping / load dom
         private int _currentRound = 1;
         private int _distance;
         private int _furthestHorseDistance;
-        private readonly PageLoader _pageLoader;
 
         public Horse(string name, string url)
         {
@@ -75,30 +75,6 @@ namespace Horserace.Models
         public event EventHandler<HorseChangedEventArgs> _horseChanged;
         public event EventHandler _horseFinished;
 
-        private void PingReceived(object sender, HorseProgressEventArgs e)
-        {
-            Distance = e.TotalTime;
-            CurrentRound = e.PingIteration;
-        }
-
-        private void PingFinished(object sender, FinishedEventArgs e)
-        {
-            switch (e.Type)
-            {
-                case FinishType.CANCELED:
-                    Distance = 0;
-                    break;
-                case FinishType.ERROR:
-                    ToastUtil.Notify("Disqualified", $"Horse {Name} has been disqualified");
-                    Debug.WriteLine($"Horse {Name} has been disqualified");
-                    break;
-                case FinishType.FINISHED:
-                    Status = HorseStatus.FINISHED;
-                    OnHorseFinished();
-                    break;
-            }
-        }
-
         public async void Start(int numberOfPings)
         {
             Status = HorseStatus.RUNNING;
@@ -141,6 +117,30 @@ namespace Horserace.Models
         {
             EventHandler handler = _horseFinished;
             handler?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void PingReceived(object sender, HorseProgressEventArgs e)
+        {
+            Distance = e.TotalTime;
+            CurrentRound = e.PingIteration;
+        }
+
+        private void PingFinished(object sender, FinishedEventArgs e)
+        {
+            switch (e.Type)
+            {
+                case FinishType.CANCELED:
+                    Distance = 0;
+                    break;
+                case FinishType.ERROR:
+                    ToastUtil.Notify("Disqualified", $"Horse {Name} has been disqualified");
+                    Debug.WriteLine($"Horse {Name} has been disqualified");
+                    break;
+                case FinishType.FINISHED:
+                    Status = HorseStatus.FINISHED;
+                    OnHorseFinished();
+                    break;
+            }
         }
     }
 }
