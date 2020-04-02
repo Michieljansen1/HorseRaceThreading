@@ -5,22 +5,21 @@ using System.Threading;
 using Windows.Foundation;
 using Windows.Networking;
 using Windows.Networking.Sockets;
+using ThreadPool = Windows.System.Threading.ThreadPool;
 
 namespace Horserace.Common
 {
+    /// <summary>
+    ///     Ping is used to calculate the total time sum of x pings to a given server
+    /// </summary>
     class Ping
     {
-        private readonly string _url;
-        private int _previousPingTime;
-        private int _totalTime = 0; // The time for each ping with the delta from each ping in ms
-        private bool _isRunning;
-        private IAsyncAction _pingAction;
-
-        public event EventHandler<HorseProgressReport> _pingReceived;
-        public event EventHandler<FinishedEventArgs> _threadFinished;
+        private readonly string _url; // URL to ping
+        private bool _isRunning; // Used to signal the thread to stop
+        private int _totalTime; // The time for each ping with the delta from each ping in ms
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="url">URL to ping</param>
         public Ping(string url)
@@ -28,38 +27,40 @@ namespace Horserace.Common
             _url = url;
         }
 
+        public event EventHandler<HorseProgressReport> PingReceived;
+        public event EventHandler<FinishedEventArgs> ThreadFinished;
+
         /// <summary>
-        /// Initializes a thread and starts pinging the specified server
-        /// Calculates the ping and delta of each ping in ms
+        ///     Initializes a thread and starts pinging the specified server
+        ///     Calculates the ping and delta of each ping in ms
         /// </summary>
         public void StartPing(int numberOfPings)
         {
             _isRunning = true;
+            _totalTime = 0;
 
-            _pingAction = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
-            {
-                int previousPingTime = 0;
-                int delta = 0;
-                int pingIteration = 1;
+            IAsyncAction _pingAction = ThreadPool.RunAsync(async workItem => {
+                var previousPingTime = 0;
+                var delta = 0;
+                var pingIteration = 1;
                 while (pingIteration <= numberOfPings && _isRunning)
                 {
-                    Stopwatch stopwatch = new Stopwatch();
-                    StreamSocket socket = new StreamSocket();
+                    var stopwatch = new Stopwatch();
+                    var socket = new StreamSocket();
                     stopwatch.Start();
                     try
                     {
                         await socket.ConnectAsync(new HostName(_url), "80");
-                    }
-                    catch (Exception e)
+                    } catch (Exception e)
                     {
-                        onThreadFinished(FinishedEventArgs.FinishType.ERROR);
-                        onThreadFinished(FinishedEventArgs.FinishType.FINISHED);
+                        OnThreadFinished(FinishedEventArgs.FinishType.ERROR);
+                        OnThreadFinished(FinishedEventArgs.FinishType.FINISHED);
                         return;
                     }
-                    
+
                     stopwatch.Stop();
 
-                    int ms = (int)stopwatch.ElapsedMilliseconds;
+                    var ms = (int)stopwatch.ElapsedMilliseconds;
 
                     // First time there is no delta
                     if (pingIteration > 0)
@@ -73,55 +74,55 @@ namespace Horserace.Common
                     HorseProgressReport horseProgressReport = new HorseProgressReport(_totalTime, pingIteration);
                     OnPingReceived(horseProgressReport);
 
-                    // TODO: remove debug
-                    Debug.WriteLine($"url {_url} time: {ms} systemTime: {System.DateTime.Now} delta: {delta} total time: {_totalTime}");
                     Thread.Sleep(1000);
                     pingIteration++;
                 }
 
                 if (!_isRunning)
                 {
-                    onThreadFinished(FinishedEventArgs.FinishType.CANCELED);
+                    OnThreadFinished(FinishedEventArgs.FinishType.CANCELED);
                     return;
                 }
 
-                onThreadFinished(FinishedEventArgs.FinishType.FINISHED);
+                OnThreadFinished(FinishedEventArgs.FinishType.FINISHED);
             });
         }
 
+
         /// <summary>
-        /// Signals the ping thread to stop
+        ///     Event triggers whenever a ping is finished
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnPingReceived(HorseProgressReport e)
+        {
+            EventHandler<HorseProgressReport> handler = PingReceived;
+            handler?.Invoke(this, e);
+        }
+
+        /// <summary>
+        ///     Event triggers whenever the thread is finished by itself or canceled by the user
+        /// </summary>
+        /// <param name="finishType"></param>
+        protected virtual void OnThreadFinished(FinishedEventArgs.FinishType finishType)
+        {
+            ThreadFinished?.Invoke(this, new FinishedEventArgs(finishType));
+        }
+
+        /// <summary>
+        ///     Signals the ping thread to stop
         /// </summary>
         public void StopPing()
         {
             _isRunning = false;
         }
 
+        /// <summary>
+        /// Adds extra time to the total ping time (thread safe)
+        /// </summary>
+        /// <param name="time">time in ms to add</param>
         public void AddTime(int time)
         {
             Interlocked.Add(ref _totalTime, time);
-        }
-
-        /// <summary>
-        /// Event triggers whenever a ping is finished
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnPingReceived(HorseProgressReport e) {
-            EventHandler<HorseProgressReport> handler = _pingReceived;
-            if (handler != null) {
-                handler(this, e);
-            }
-        }
-
-        /// <summary>
-        /// Event triggers whenever the thread is finished by itself or canceled by the user
-        /// </summary>
-        /// <param name="finishType"></param>
-        protected virtual void onThreadFinished(FinishedEventArgs.FinishType finishType) {
-            EventHandler<FinishedEventArgs> handler = _threadFinished;
-            if (handler != null) {
-                handler(this, new FinishedEventArgs(finishType));
-            }
         }
     }
 }

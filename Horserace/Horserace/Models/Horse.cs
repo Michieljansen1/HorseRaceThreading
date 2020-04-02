@@ -39,8 +39,8 @@ namespace Horserace.Models
             _name = name;
             _url = url;
             _ping = new Ping(url);
-            _ping._pingReceived += PingReceived;
-            _ping._threadFinished += PingFinished;
+            _ping.PingReceived += PingReceived;
+            _ping.ThreadFinished += PingFinished;
             _pageLoader = new PageLoader();
             Distance = 0;
         }
