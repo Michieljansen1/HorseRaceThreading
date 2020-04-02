@@ -1,39 +1,29 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Net;
 using System.Threading.Tasks;
-using Windows.Networking;
-using Windows.Networking.Sockets;
 
 namespace Horserace.Common
 {
     /// <summary>
-    /// Deterimen the size of a webpage class
+    /// Determine the size of a webpage class
     /// </summary>
     class PageLoader
     {
-
-        private int _totalSize;
+        private int _totalSize; // Total size of all pages
 
         /// <summary>
-        /// list of pages
+        /// list of pages to check the content for
         /// </summary>
-        readonly string[] pages = new string[]
-        {
+        private readonly string[] _pages = {
             "/",
             "/robots.txt",
             "/contact",
             "/sitemap.xml",
         };
 
-        /**************************************************************************
-            * Private methods 
-        **************************************************************************/
-
         /// <summary>
-        /// 
+        /// Fetches the content of the give URL webpage and returns the DOM size
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="url">URL to fetch</param>
         private async Task<int> GetDomSize(string url)
         {
             Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
@@ -61,8 +51,6 @@ namespace Horserace.Common
             {
                 httpResponse = await httpClient.GetAsync(requestUri);
                 return httpResponse.Content.ToString().Length;
-
-
             }
             catch (Exception ex)
             {
@@ -71,17 +59,13 @@ namespace Horserace.Common
         }
 
 
-        /**************************************************************************
-            * Public methods 
-        **************************************************************************/
-
         /// <summary>
         ///  the size of the total site
         /// </summary>
-        /// <param name="size"></param>
+        /// <param name="url">Base url to fetch</param>
         public async Task<int> Run(string url)
         {
-            foreach (var page in pages)
+            foreach (var page in _pages)
             {
                 _totalSize += await GetDomSize("https://"+url+page);
             }
