@@ -36,7 +36,7 @@
 
         <Button x:Name="btn_restartGame" Content="Reset game" Grid.Row="1" Grid.Column="3"  Height="32" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="5,30,5,0" Click="Btn_resetGame_OnClick" Background="#33FF9700"></Button>
 
-        <TextBox x:Name="txt_horseName" Grid.Row="2" Grid.Column="0" PlaceholderText="Naam" VerticalAlignment="Center" Margin="5,30,5,0"/>
+        <TextBox x:Name="txt_horseName" Grid.Row="2" Grid.Column="0" PlaceholderText="Name" VerticalAlignment="Center" Margin="5,30,5,0"/>
         <TextBox x:Name="txt_horseUrl" Grid.Row="2" Grid.Column="1" PlaceholderText="URL" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="5,30,5,0"></TextBox>
         <Button x:Name="btn_addHorse" Grid.Row="2" Content="Add horse"  Grid.Column="3"  Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="5,0,5,0" Click="Btn_addHorse_OnClick"></Button>
 
