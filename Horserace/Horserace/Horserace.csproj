@@ -122,8 +122,10 @@
     <Compile Include="Common\PageLoader.cs" />
     <Compile Include="Common\Ping.cs" />
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Enums\FinishType.cs" />
+    <Compile Include="Enums\HorseStatus.cs" />
     <Compile Include="Events\HorseChangedEventArgs.cs" />
-    <Compile Include="Events\HorseProgressReport.cs" />
+    <Compile Include="Events\HorseProgressEventArgs.cs" />
     <Compile Include="Events\FinishedEventArgs.cs" />
     <Compile Include="HorseControl.xaml.cs">
       <DependentUpon>HorseControl.xaml</DependentUpon>
@@ -232,7 +234,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Enums\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
