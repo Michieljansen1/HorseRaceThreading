@@ -1,36 +1,32 @@
 ﻿using System;
-using System.Diagnostics;
-using Windows.Networking;
-using Windows.Networking.Sockets;
+using System.Threading.Tasks;
+using Windows.Web.Http;
 
 namespace Horserace.Common
 {
+    /// <summary>
+    ///     Determine the size of a webpage class
+    /// </summary>
     class PageLoader
     {
-        //Constructor
-        public PageLoader()
+        /// <summary>
+        ///     list of pages to check the content for
+        /// </summary>
+        private readonly string[] _pages = { "/", "/robots.txt", "/contact", "/sitemap.xml" };
+
+        private int _totalSize; // Total size of all pages
+
+        /// <summary>
+        ///     Fetches the content of the give URL webpage and returns the DOM size
+        /// </summary>
+        /// <param name="url">URL to fetch</param>
+        private async Task<int> GetDomSize(string url)
         {
+            HttpClient httpClient = new HttpClient();
 
-        }
-
-
-        /**************************************************************************
-            * Public methods 
-        **************************************************************************/
-
-        public async void GetDom(string url)
-        {
-
-            Stopwatch stopwatch = new Stopwatch();
-            //Create an HTTP client object
-            Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient();
-
-            //Add a user-agent header to the GET request. 
             var headers = httpClient.DefaultRequestHeaders;
 
-            //The safe way to add a header value is to use the TryParseAdd method and verify the return value is true,
-            //especially if the header value is coming from user input.
-            string header = "ie";
+            var header = "ie";
             if (!headers.UserAgent.TryParseAdd(header))
             {
                 throw new Exception("Invalid header value: " + header);
@@ -42,28 +38,32 @@ namespace Horserace.Common
                 throw new Exception("Invalid header value: " + header);
             }
 
-            Uri requestUri = new Uri(url);
-
-            //Send the GET request asynchronously and retrieve the response as a string.
-            Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
-            string httpResponseBody = "";
+            var requestUri = new Uri(url);
 
             try
             {
-                stopwatch.Start();
-                //Send the GET request
-                // httpResponse = await httpClient.GetAsync(requestUri);
-                // httpResponse.EnsureSuccessStatusCode();
-                // httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
-            }
-            catch (Exception ex)
+                //Send the GET request asynchronously and retrieve the response as a string
+                var httpResponse = await httpClient.GetAsync(requestUri);
+                return httpResponse.Content.ToString().Length;
+            } catch (Exception ex)
             {
-                httpResponseBody = "Error: " + ex.HResult.ToString("X") + " Message: " + ex.Message;
+                return 0;
+            }
+        }
+
+
+        /// <summary>
+        ///     the size of the total site
+        /// </summary>
+        /// <param name="url">Base url to fetch</param>
+        public async Task<int> Run(string url)
+        {
+            foreach (var page in _pages)
+            {
+                _totalSize += await GetDomSize("https://" + url + page);
             }
 
-            stopwatch.Stop();
-
-            Debug.WriteLine("TIME = " + stopwatch.ElapsedMilliseconds + " URL " + url);
+            return _totalSize / 10;
         }
     }
 }
