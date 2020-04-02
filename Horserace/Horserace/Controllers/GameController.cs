@@ -91,6 +91,10 @@ namespace Horserace.Controllers
         {
             // Getting the horse with the furthest distance
             var distance = Horses.Max(horse => horse.Distance);
+            
+            // Prevents the progressbar to be filled when all horses haven't started yet
+            if (distance == 0)
+                distance = 1;
 
             foreach (Horse horse in Horses)
             {
