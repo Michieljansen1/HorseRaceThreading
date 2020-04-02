@@ -19,10 +19,15 @@ namespace Horserace.Models
         private readonly PageLoader _pageLoader; // Used to get the DOM size
         private readonly Ping _ping; // Used to ping the server
         private readonly string _url; // Holds the URL of the website to ping / load dom
-        private int _currentRound = 1;
-        private int _distance;
-        private int _furthestHorseDistance;
+        private int _currentRound = 1; // Current ping iteration
+        private int _distance; // Total distance the horse has ran (in steps)
+        private int _furthestHorseDistance; // Distance of the furthest horse (can be another horse)
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="url"></param>
         public Horse(string name, string url)
         {
             Name = name;
@@ -36,6 +41,9 @@ namespace Horserace.Models
 
         public string Name { get; }
 
+        /// <summary>
+        /// Getter and setter for distance. Raises property changed event to signal the GUI to update
+        /// </summary>
         public int Distance
         {
             get { return _distance; }
@@ -45,6 +53,9 @@ namespace Horserace.Models
             }
         }
 
+        /// <summary>
+        /// Getter and setter for distance. Raises event on SET to signal the GUI to update
+        /// </summary>
         public int FurthestHorseDistance
         {
             get => _furthestHorseDistance;
@@ -54,6 +65,9 @@ namespace Horserace.Models
             }
         }
 
+        /// <summary>
+        /// Getter and setter for the CurrentRound. Raises event on SET to signal the GUI to update
+        /// </summary>
         public int CurrentRound
         {
             get => _currentRound;
@@ -63,6 +77,9 @@ namespace Horserace.Models
             }
         }
 
+        /// <summary>
+        /// Getter and setter for HorseFinishedEvent.
+        /// </summary>
         public EventHandler HorseFinishedEvent
         {
             get { return _horseFinished; }
@@ -71,10 +88,14 @@ namespace Horserace.Models
 
         public HorseStatus Status { get; private set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<HorseChangedEventArgs> _horseChanged;
-        public event EventHandler _horseFinished;
+        public event PropertyChangedEventHandler PropertyChanged; // Used to signal the UI to update the binded values
+        public event EventHandler<HorseChangedEventArgs> _horseChanged; // Used to signal the GameController that a horse changed
+        public event EventHandler _horseFinished; // Used to signal the GameController that the horse finished
 
+        /// <summary>
+        /// Sets the horse to status running and starts pinging/ fetching dom size
+        /// </summary>
+        /// <param name="numberOfPings"></param>
         public async void Start(int numberOfPings)
         {
             Status = HorseStatus.RUNNING;
@@ -82,12 +103,19 @@ namespace Horserace.Models
             _ping.AddTime(await _pageLoader.Run(_url));
         }
 
+        /// <summary>
+        /// Sets the horse status to IDLE and signals the ping thread to stop
+        /// </summary>
         public void Stop()
         {
             Status = HorseStatus.IDLE;
             _ping.StopPing();
         }
 
+        /// <summary>
+        /// Signals the GUI to update the binded elements and signals the GameController that the horse changed a property
+        /// </summary>
+        /// <param name="name"></param>
         protected void RaisePropertyChanged([CallerMemberName] string name = "")
         {
             _ = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
@@ -98,6 +126,10 @@ namespace Horserace.Models
                 });
         }
 
+        /// <summary>
+        /// Signals the GUI to update the GUI
+        /// </summary>
+        /// <param name="name"></param>
         protected void OnFurthestHorseChange([CallerMemberName] string name = "")
         {
             _ = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
@@ -107,24 +139,41 @@ namespace Horserace.Models
                 });
         }
 
+        /// <summary>
+        /// Signals all listening events that the horse changed
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnHorseChanged(HorseChangedEventArgs e)
         {
-            EventHandler<HorseChangedEventArgs> handler = _horseChanged;
+            var handler = _horseChanged;
             handler?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Signals all listening events that the horse finished racing
+        /// </summary>
         protected virtual void OnHorseFinished()
         {
-            EventHandler handler = _horseFinished;
+            var handler = _horseFinished;
             handler?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Triggers when a new ping event is received
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Current horse progress</param>
         private void PingReceived(object sender, HorseProgressEventArgs e)
         {
             Distance = e.TotalTime;
             CurrentRound = e.PingIteration;
         }
 
+        /// <summary>
+        /// Triggers when the ping thread is finished
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Event with the finish type</param>
         private void PingFinished(object sender, FinishedEventArgs e)
         {
             switch (e.Type)

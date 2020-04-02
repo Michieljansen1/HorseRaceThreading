@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Horserace.Enums;
 using Horserace.Events;
 using Horserace.Models;
 using Horserace.Utlis;
@@ -108,7 +109,7 @@ namespace Horserace.Controllers
 
             foreach (Horse horse in Horses)
             {
-                if (horse.Status != Horse.HorseStatus.FINISHED)
+                if (horse.Status != HorseStatus.FINISHED)
                 {
                     return;
                 }
@@ -119,11 +120,9 @@ namespace Horserace.Controllers
                 }
             }
 
-            if (bestHorse != null)
-            {
-                ToastUtil.Notify($"{bestHorse.Name} is the winner!", $"With a total distance of: {bestHorse.Distance}");
-                MediaUtil.PlaySound("trumpet1.mp3");
-            }
+            if (bestHorse == null) return;
+            ToastUtil.Notify($"{bestHorse.Name} is the winner!", $"With a total distance of: {bestHorse.Distance}");
+            MediaUtil.PlaySound("trumpet1.mp3");
         }
     }
 }
