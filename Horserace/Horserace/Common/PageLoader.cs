@@ -40,12 +40,10 @@ namespace Horserace.Common
 
             var requestUri = new Uri(url);
 
-            //Send the GET request asynchronously and retrieve the response as a string.
-            HttpResponseMessage httpResponse = new HttpResponseMessage();
-
             try
             {
-                httpResponse = await httpClient.GetAsync(requestUri);
+                //Send the GET request asynchronously and retrieve the response as a string
+                var httpResponse = await httpClient.GetAsync(requestUri);
                 return httpResponse.Content.ToString().Length;
             } catch (Exception ex)
             {

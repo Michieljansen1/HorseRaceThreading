@@ -7,7 +7,7 @@ namespace Horserace.Utlis
     /// <summary>
     ///     Manages the toast to inform the user
     /// </summary>
-    class ToastUtil
+    static class ToastUtil
     {
         /// <summary>
         ///     Builds and shows a toast

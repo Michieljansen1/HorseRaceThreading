@@ -9,7 +9,7 @@ namespace Horserace.Utlis
     /// <summary>
     ///     Manages the audio for the game
     /// </summary>
-    class MediaUtil
+    static class MediaUtil
     {
         /// <summary>
         ///     Player is used to play the audio
