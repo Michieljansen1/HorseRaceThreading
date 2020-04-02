@@ -5,6 +5,7 @@ using System.Threading;
 using Windows.Foundation;
 using Windows.Networking;
 using Windows.Networking.Sockets;
+using Horserace.Enums;
 using ThreadPool = Windows.System.Threading.ThreadPool;
 
 namespace Horserace.Common
@@ -53,8 +54,8 @@ namespace Horserace.Common
                         await socket.ConnectAsync(new HostName(_url), "80");
                     } catch (Exception e)
                     {
-                        OnThreadFinished(FinishedEventArgs.FinishType.ERROR);
-                        OnThreadFinished(FinishedEventArgs.FinishType.FINISHED);
+                        OnThreadFinished(FinishType.ERROR);
+                        OnThreadFinished(FinishType.FINISHED);
                         return;
                     }
 
@@ -80,11 +81,11 @@ namespace Horserace.Common
 
                 if (!_isRunning)
                 {
-                    OnThreadFinished(FinishedEventArgs.FinishType.CANCELED);
+                    OnThreadFinished(FinishType.CANCELED);
                     return;
                 }
 
-                OnThreadFinished(FinishedEventArgs.FinishType.FINISHED);
+                OnThreadFinished(FinishType.FINISHED);
             });
         }
 
@@ -103,7 +104,7 @@ namespace Horserace.Common
         ///     Event triggers whenever the thread is finished by itself or canceled by the user
         /// </summary>
         /// <param name="finishType"></param>
-        protected virtual void OnThreadFinished(FinishedEventArgs.FinishType finishType)
+        protected virtual void OnThreadFinished(FinishType finishType)
         {
             ThreadFinished?.Invoke(this, new FinishedEventArgs(finishType));
         }

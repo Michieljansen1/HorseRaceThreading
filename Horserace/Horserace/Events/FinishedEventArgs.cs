@@ -1,23 +1,24 @@
-﻿namespace Horserace.Events
+﻿using Horserace.Enums;
+
+namespace Horserace.Events
 {
     /// <summary>
-    /// EventArgs to define whether a thread is canceled by user or finished by itself.
+    ///     EventArgs to define whether a thread is canceled by user or finished by itself.
     /// </summary>
     class FinishedEventArgs
     {
-        public enum FinishType
-        {
-            FINISHED,
-            CANCELED,
-            ERROR
-        }
-        private FinishType _finishType;
-
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="finishType"></param>
         public FinishedEventArgs(FinishType finishType)
         {
-            _finishType = finishType;
+            Type = finishType;
         }
 
-        public FinishType Type => _finishType;
+        /// <summary>
+        ///     Gets the set Type
+        /// </summary>
+        public FinishType Type { get; }
     }
 }
